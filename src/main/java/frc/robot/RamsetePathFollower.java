@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.TimesliceRobot;
 
 /** Add your docs here. */
 public class RamsetePathFollower {
@@ -39,6 +40,13 @@ public class RamsetePathFollower {
         ramseteController = new RamseteController(b, zeta);
         setTrajectory(trajectory);
         resetPath();
+        timeSinceStart = 0;
+    }
+
+    public RamsetePathFollower() {
+        setTrajectory(new Trajectory());
+        ramseteController = new RamseteController();
+        timeSinceStart = 0;
     }
   
     /**
@@ -73,7 +81,7 @@ public class RamsetePathFollower {
    * @param filename Name of JSON File acquired from Pathweaver
    * @return currentTrajectory
    */
-    public static Trajectory getTrajectory(String filename) { 
+    public static Trajectory readTrajectory(String filename) { 
         Trajectory trajectory = null;
         try{
             Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(filename);
